@@ -12,7 +12,7 @@ public:
   {
     // ---- Parameters ----
     broker_ = this->declare_parameter<std::string>(
-        "broker", "145.126.66.251:9092");
+        "broker", "192.168.1.1:9092");
 
     kafka_topic_ = this->declare_parameter<std::string>(
         "kafka_topic", "test-topic");
