@@ -11,5 +11,8 @@ git clone https://github.com/PronkLJ/ros2kafka
 
 ## Running the ROS2Kafka bridge
 ```console
-ros2 run ros2kafka joint_state_kafka_bridge   --ros-args   -p broker:=[IP:Port]   -p kafka_topic:=[test-topic]   -p ros_topic:=[/ros2topic]
+ros2 run ros2kafka joint_state_kafka_bridge --ros-args -p \
+ip:=[IP:Port] -p \
+kafka_topic:=[topic_name] -p \
+ros2_topic:=[/ros2topic_name]
 ```

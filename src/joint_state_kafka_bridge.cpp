@@ -11,25 +11,25 @@ public:
   : Node("joint_state_kafka_bridge")
   {
     // ---- Parameters ----
-    broker_ = this->declare_parameter<std::string>(
-        "broker", "192.168.1.1:9092");
+    ip_ = this->declare_parameter<std::string>(
+        "ip", "192.168.1.1:9092");
 
     kafka_topic_ = this->declare_parameter<std::string>(
         "kafka_topic", "test-topic");
 
-    ros_topic_ = this->declare_parameter<std::string>(
-        "ros_topic", "/joint_states");
+    ros2_topic_ = this->declare_parameter<std::string>(
+        "ros2_topic", "/joint_states");
 
     init_kafka();
 
     sub_ = this->create_subscription<sensor_msgs::msg::JointState>(
-        ros_topic_, 10,
+        ros2_topic_, 10,
         std::bind(&JointStateKafkaBridge::callback, this, std::placeholders::_1));
 
-    RCLCPP_INFO(get_logger(), "ROS → Kafka bridge started");
-    RCLCPP_INFO(get_logger(), "Broker: %s", broker_.c_str());
+    RCLCPP_INFO(get_logger(), "ROS2 → Kafka bridge started");
+    RCLCPP_INFO(get_logger(), "IP Address: %s", ip_.c_str());
     RCLCPP_INFO(get_logger(), "Kafka topic: %s", kafka_topic_.c_str());
-    RCLCPP_INFO(get_logger(), "ROS topic: %s", ros_topic_.c_str());
+    RCLCPP_INFO(get_logger(), "ROS2 topic: %s", ros2_topic_.c_str());
   }
 
   ~JointStateKafkaBridge()
@@ -47,7 +47,7 @@ private:
     rd_kafka_conf_t *conf = rd_kafka_conf_new();
 
     if (rd_kafka_conf_set(conf, "bootstrap.servers",
-                          broker_.c_str(),
+                          ip_.c_str(),
                           errstr, sizeof(errstr)) != RD_KAFKA_CONF_OK)
     {
       throw std::runtime_error(errstr);
@@ -94,9 +94,9 @@ private:
     rd_kafka_poll(producer_, 0);
   }
 
-  std::string broker_;
+  std::string ip_;
   std::string kafka_topic_;
-  std::string ros_topic_;
+  std::string ros2_topic_;
 
   rd_kafka_t *producer_{nullptr};
   rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr sub_;
