@@ -12,10 +12,10 @@ public:
   {
     // ---- Parameters ----
     ip_ = this->declare_parameter<std::string>(
-        "ip", "192.168.1.1:9092");
+        "ip", "130.89.251.69:9092");
 
     kafka_topic_ = this->declare_parameter<std::string>(
-        "kafka_topic", "test-topic");
+        "kafka_topic", "crx-topic");
 
     ros2_topic_ = this->declare_parameter<std::string>(
         "ros2_topic", "/joint_states");
@@ -78,9 +78,13 @@ private:
 
     std::string payload = ss.str();
 
+    // Publish to Kafka
+    //RCLCPP_INFO(get_logger(), "Publishing to Kafka: %s", payload.c_str());
+
     rd_kafka_resp_err_t err = rd_kafka_producev(
         producer_,
         RD_KAFKA_V_TOPIC(kafka_topic_.c_str()),
+        RD_KAFKA_V_MSGFLAGS(RD_KAFKA_MSG_F_COPY),
         RD_KAFKA_V_VALUE(
             const_cast<char*>(payload.data()),
             payload.size()),        
