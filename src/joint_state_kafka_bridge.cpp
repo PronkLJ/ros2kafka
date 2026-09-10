@@ -78,7 +78,7 @@ private:
 
     std::string payload = ss.str();
 
-    // Publish to Kafka
+    // Info logger for debugging purposes, can be uncommented if needed
     //RCLCPP_INFO(get_logger(), "Publishing to Kafka: %s", payload.c_str());
 
     rd_kafka_resp_err_t err = rd_kafka_producev(
